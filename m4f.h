@@ -34,6 +34,7 @@ static inline
 struct m4f m4f_identity() {
     return m4f_scale(1, 1, 1);
 }
+
 static inline
 struct m4f m4f_translate(float x, float y, float z) {
     struct m4f m = m4f_identity();
@@ -152,6 +153,17 @@ struct v3f m4f_apply(struct m4f this, struct v3f v)
     c.z = v.x * this.m31 + v.y * this.m32 + v.z * this.m33 + 1 * this.m34;
     // We don't care about the last
     return c;
+}
+
+static inline
+struct m4f m4f_transpose(struct m4f this) {
+    struct m4f m = {
+        this.m11, this.m21, this.m31, this.m41,
+        this.m12, this.m22, this.m32, this.m42,
+        this.m13, this.m23, this.m33, this.m43,
+        this.m14, this.m24, this.m34, this.m44,
+    };
+    return m;
 }
 
 #endif // #ifndef __M4F_H__
