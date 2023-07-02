@@ -26,7 +26,7 @@ clean: $(SUBDIRS)
 
 cleaner: $(SUBDIRS) clean
 	[ -z "$(DEPS)" ] || rm -f $(DEPS)
-
+	rm -f core
 
 # automatically generate dependency rules
 %.d: %.c
