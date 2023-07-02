@@ -4,6 +4,10 @@
 #include "m4f.h"
 #include "io.h"
 
+#ifndef M_PI
+#    define M_PI 3.14159265358979323846
+#endif
+
 int main(int argc, char* argv[]) {
     // Skip program name
     argc --; argv ++;
