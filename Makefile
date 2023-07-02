@@ -1,11 +1,44 @@
 CFLAGS+=-g -O0
-all: identity scale rotate translate apply
 
-identity: io.h m4f.h v3f.h
-scale: io.h m4f.h v3f.h
-rotate: io.h m4f.h v3f.h
-translate: io.h m4f.h v3f.h
-apply: io.h m4f.h v3f.h
+SRCS=$(wildcard *.c)
+OBJS=$(SRCS:.c=.o)
+DEPS=$(SRCS:.c=.d)
 
-rotate: LDLIBS+=-lm
-rotate: CFLAGS+=-D_USE_MATH_DEFINES
+ifeq ($(OS),Windows_NT)
+EXT=.exe
+endif
+EXES=$(SRCS:.c=$(EXT))
+
+%$(EXT): %.o
+	$(LINK.c) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+OPTIM_LEVEL=0
+CFLAGS+=-g
+CFLAGS+=-Wall -Werror -pedantic
+CFLAGS+=-O$(OPTIM_LEVEL)
+CFLAGS+=$(CFLAGS_EXTRA)
+LDLIBS+=-lm
+
+all: $(SUBDIRS) $(EXES)
+
+clean: $(SUBDIRS)
+	rm -f $(OBJS) $(EXES)
+
+cleaner: $(SUBDIRS) clean
+	[ -z "$(DEPS)" ] || rm -f $(DEPS)
+
+
+# automatically generate dependency rules
+%.d: %.c
+		$(CC) $(CCFLAGS) -MF"$@" -MG -MM -MP -MT"$@" -MT"$(<:.c=.o)" "$<"
+
+# -MF  write the generated dependency rule to a file
+# -MG  assume missing headers will be generated and don't stop with an error
+# -MM  generate dependency rule for prerequisite, skipping system headers
+# -MP  add phony target for each header to prevent errors when header is missing
+# -MT  add a target to the generated dependency
+-include $(DEPS)
+
+# Specific rules
+rotate$(EXT): LDLIBS+=-lm
+rotate.o: CFLAGS+=-D_USE_MATH_DEFINES

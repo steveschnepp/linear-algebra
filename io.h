@@ -7,7 +7,7 @@
 #include "m4f.h"
 
 static inline
-int print_m4f(struct m4f m) {
+void print_m4f(struct m4f m) {
     printf("%f %f %f %f\n", m.m11, m.m12, m.m13, m.m14);
     printf("%f %f %f %f\n", m.m21, m.m22, m.m23, m.m24);
     printf("%f %f %f %f\n", m.m31, m.m32, m.m33, m.m34);
@@ -37,7 +37,7 @@ struct m4f sscan_m4f_args(char* argv[]) {
 }
 
 static inline
-int print_v3f(struct v3f v) {
+void print_v3f(struct v3f v) {
     printf("%f %f %f\n", v.x, v.y, v.z);
 }
 
